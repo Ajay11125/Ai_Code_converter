@@ -33,7 +33,7 @@ export default function CodeEditor() {
         quality: "/quality",
       }[task];
 
-      const res = await axios.post(`http://localhost:8080/api${endpoint}`, {
+      const res = await axios.post(`https://ai-code-converter-a0v3.onrender.com/api${endpoint}`, {
         code,
         sourceLang,
         targetLang,
