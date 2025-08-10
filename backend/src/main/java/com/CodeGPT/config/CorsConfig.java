@@ -15,7 +15,7 @@ public class CorsConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**") // allow all endpoints
-                        .allowedOrigins("http://localhost:3000") // allow frontend origin
+                        .allowedOrigins("https://ai-code-converter-nu.vercel.app") // allow frontend origin
                         .allowedMethods("*")
                         .allowedHeaders("*")
                         .allowCredentials(true); // allows cookies/session
