@@ -70,7 +70,6 @@ public class GptService {
             JSONObject jsonResponse = new JSONObject(response.body());
 
 
-            System.out.println(jsonResponse.getString("text"));
             return jsonResponse.getJSONArray("candidates")
                     .getJSONObject(0)
                     .getJSONObject("content")
