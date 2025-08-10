@@ -1,25 +1,21 @@
-# Use official OpenJDK image
-FROM openjdk:17-jdk-slim
-
-# Set working directory
+# --- Stage 1: Build the application ---
+FROM maven:3.9.1-eclipse-temurin-17 AS builder
 WORKDIR /app
 
-# Copy Maven wrapper & pom.xml first (for caching dependencies)
-COPY mvnw .
-COPY .mvn .mvn
+# Copy source code
 COPY pom.xml .
+COPY src ./src
 
-# Download dependencies (this helps with build caching)
-RUN ./mvnw dependency:go-offline -B
+# Build the application JAR
+RUN mvn clean package -DskipTests
 
-# Copy the rest of your application
-COPY src src
+# --- Stage 2: Run time image ---
+FROM eclipse-temurin:17-jdk-slim
+WORKDIR /app
 
-# Package the application
-RUN ./mvnw clean package -DskipTests
+# Copy JAR from build stage
+COPY --from=builder /app/target/*.jar app.jar
 
-# Expose port 8080 (Render will override with PORT env var)
-EXPOSE 8080
-
-# Run the application
-ENTRYPOINT ["java", "-jar", "target/codeconverter-0.0.1-SNAPSHOT.jar"]
+# Use PORT env (default 8080)
+ENV JAVA_OPTS ""
+ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar app.jar"]
