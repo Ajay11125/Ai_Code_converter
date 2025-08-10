@@ -10,12 +10,12 @@ COPY src ./src
 RUN mvn clean package -DskipTests
 
 # --- Stage 2: Run time image ---
-FROM eclipse-temurin:17-jdk-slim
+FROM openjdk:17-jdk-slim
 WORKDIR /app
 
 # Copy JAR from build stage
 COPY --from=builder /app/target/*.jar app.jar
 
 # Use PORT env (default 8080)
-ENV JAVA_OPTS ""
+ENV JAVA_OPTS=""
 ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar app.jar"]
